@@ -1,12 +1,15 @@
 <?php
-$host = "db";
-$dbname = getenv("POSTGRES_DB");
-$user = getenv("POSTGRES_USER");
-$password = getenv("POSTGRES_PASSWORD");
+
+require_once __DIR__ . '/models/Database.php';
 
 try {
-    $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
-    echo "✅ Conectado com sucesso!";
-} catch (PDOException $e) {
-    echo "Erro: " . $e->getMessage();
+    $pdo = Database::connect();
+
+    echo "✅ Conexão com o banco realizada com sucesso!<br>";
+
+    $stmt = $pdo->query("SELECT NOW()");
+    $time = $stmt->fetch();
+
+} catch (Exception $e) {
+    echo "❌ Erro na conexão: " . $e->getMessage();
 }
