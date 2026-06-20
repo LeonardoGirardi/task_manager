@@ -1,25 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login // TaskManager Pro</title>
+    <link rel="stylesheet" href="/style/style.css">
 </head>
 <body>
 
-<h2>Login</h2>
+<?php require __DIR__ . '/../baseline/frame_top.php'; ?>
 
-<form method="POST" action="/login">
-    <input type="email" name="email" placeholder="Email" required>
-    <br><br>
+<div class="auth-center">
+    <div class="auth-box">
+        <div class="auth-corner auth-corner-tl"></div>
+        <div class="auth-corner auth-corner-tr"></div>
+        <div class="auth-corner auth-corner-bl"></div>
+        <div class="auth-corner auth-corner-br"></div>
 
-    <input type="password" name="password" placeholder="Senha" required>
-    <br><br>
+        <h1 class="auth-title">login</h1>
 
-    <button type="submit">Entrar</button>
-</form>
+        <?php if (isset($error)): ?>
+            <div class="error-msg"><?= htmlspecialchars($error) ?></div>
+        <?php endif; ?>
 
-<br>
+        <form method="POST" action="/login">
+            <div class="field-group">
+                <div class="field">
+                    <label for="email">email</label>
+                    <input type="email" id="email" name="email" placeholder="usuario@email.com" required>
+                </div>
+                <div class="field">
+                    <label for="password">senha</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                </div>
+            </div>
+            <button type="submit" class="btn-submit">[ ENTRAR ]</button>
+        </form>
 
-<a href="/register">Criar conta</a>
+        <div class="auth-footer">
+            sem conta? <a href="/register">criar agora</a>
+        </div>
+    </div>
+</div>
+
+<?php require __DIR__ . '/../baseline/frame_bottom.php'; ?>
 
 </body>
 </html>
