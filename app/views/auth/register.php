@@ -1,29 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <title>Registro</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro // TaskManager Pro</title>
+    <link rel="stylesheet" href="/style/style.css">
 </head>
 <body>
 
-<h2>Criar Conta</h2>
+<?php require __DIR__ . '/../baseline/frame_top.php'; ?>
 
-<form method="POST" action="/register">
+<div class="auth-center">
+    <div class="auth-box">
+        <div class="auth-corner auth-corner-tl"></div>
+        <div class="auth-corner auth-corner-tr"></div>
+        <div class="auth-corner auth-corner-bl"></div>
+        <div class="auth-corner auth-corner-br"></div>
 
-    <input type="text" name="name" placeholder="Nome" required>
-    <br><br>
+        <h1 class="auth-title">criar_conta</h1>
 
-    <input type="email" name="email" placeholder="Email" required>
-    <br><br>
+        <?php if (isset($error)): ?>
+            <div class="error-msg"><?= htmlspecialchars($error) ?></div>
+        <?php endif; ?>
 
-    <input type="password" name="password" placeholder="Senha" required>
-    <br><br>
+        <form method="POST" action="/register">
+            <div class="field-group">
+                <div class="field">
+                    <label for="name">nome</label>
+                    <input type="text" id="name" name="name" placeholder="Seu nome" required>
+                </div>
+                <div class="field">
+                    <label for="email">email</label>
+                    <input type="email" id="email" name="email" placeholder="usuario@email.com" required>
+                </div>
+                <div class="field">
+                    <label for="password">senha</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                </div>
+            </div>
+            <button type="submit" class="btn-submit">[ CRIAR CONTA ]</button>
+        </form>
 
-    <button type="submit">Registrar</button>
-</form>
+        <div class="auth-footer">
+            já tem conta? <a href="/login">fazer login</a>
+        </div>
+    </div>
+</div>
 
-<br>
-
-<a href="/login">Voltar</a>
+<?php require __DIR__ . '/../baseline/frame_bottom.php'; ?>
 
 </body>
 </html>
