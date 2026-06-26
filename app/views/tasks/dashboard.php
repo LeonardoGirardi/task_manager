@@ -1,8 +1,8 @@
 <?php
 $total    = count($tasks);
-$done     = array_filter($tasks, fn($t) => $t['status'] === 'done');
-$pending  = array_filter($tasks, fn($t) => $t['status'] === 'pending');
-$highPrio = array_filter($tasks, fn($t) => $t['priority'] === 'alta' && $t['status'] === 'pending');
+$done     = array_filter($tasks, fn($t) => $t['status'] === 'concluida');
+$pending  = array_filter($tasks, fn($t) => $t['status'] === 'pendente');
+$highPrio = array_filter($tasks, fn($t) => $t['priority'] === 'alta' && $t['status'] === 'pendente');
 $donePct  = $total > 0 ? round(count($done) / $total * 100) : 0;
 
 if ($total === 0)            { $gifMood = 'empty';   $gifLabel = 'Nada aqui... zzz'; }
@@ -51,7 +51,7 @@ $gifList = [
         <div class="task-list" id="task-list">
             <?php if (!empty($tasks)): ?>
                 <?php foreach ($tasks as $task): ?>
-                    <div class="task-card prio-<?= htmlspecialchars($task['priority']) ?> <?= $task['status'] === 'done' ? 'task-done' : '' ?>"
+                    <div class="task-card prio-<?= htmlspecialchars($task['priority']) ?> <?= $task['status'] === 'concluida' ? 'task-done' : '' ?>"
                          data-priority="<?= htmlspecialchars($task['priority']) ?>"
                          data-status="<?= htmlspecialchars($task['status']) ?>">
                         <div class="task-card-body">
@@ -59,13 +59,13 @@ $gifList = [
                             <p class="task-desc"><?= htmlspecialchars($task['description']) ?></p>
                             <div class="task-meta">
                                 <span class="badge badge-<?= htmlspecialchars($task['priority']) ?>"><?= strtoupper($task['priority']) ?></span>
-                                <span class="badge badge-status"><?= $task['status'] === 'done' ? 'DONE' : 'PENDING' ?></span>
+                                <span class="badge badge-status"><?= $task['status'] === 'concluida' ? 'CONCLUÍDA' : 'PENDENTE' ?></span>
                             </div>
                         </div>
                         <div class="task-actions">
                             <a href="/tasks/toggle?id=<?= $task['id'] ?>" class="btn-action btn-toggle"
-                               title="<?= $task['status'] === 'done' ? 'Reabrir' : 'Concluir' ?>">
-                                <?= $task['status'] === 'done' ? '↩' : '✓' ?>
+                               title="<?= $task['status'] === 'concluida' ? 'Reabrir' : 'Concluir' ?>">
+                                <?= $task['status'] === 'concluida' ? '↩' : '✓' ?>
                             </a>
                             <a href="/tasks/delete?id=<?= $task['id'] ?>" class="btn-action btn-delete"
                                title="Deletar"
@@ -116,18 +116,24 @@ $gifList = [
 <?php require __DIR__ . '/../baseline/frame_bottom.php'; ?>
 
 <script>
+function applyFilter(f) {
+    document.querySelectorAll('.task-card').forEach(card => {
+        const done = card.dataset.status === 'concluida';
+        if (f === 'done')       card.style.display = done ? '' : 'none';
+        else if (f === 'all')   card.style.display = done ? 'none' : '';
+        else                    card.style.display = (!done && card.dataset.priority === f) ? '' : 'none';
+    });
+}
+
 document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', function() {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
-        const f = this.dataset.filter;
-        document.querySelectorAll('.task-card').forEach(card => {
-            if (f === 'all')        card.style.display = '';
-            else if (f === 'done')  card.style.display = card.dataset.status === 'done' ? '' : 'none';
-            else card.style.display = (card.dataset.priority === f && card.dataset.status !== 'done') ? '' : 'none';
-        });
+        applyFilter(this.dataset.filter);
     });
 });
+
+applyFilter('all');
 
 const moodGifs = <?= json_encode($gifList) ?>;
 const currentMood = '<?= $gifMood ?>';
